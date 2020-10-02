@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Flask App </title>
+
+    <!-- Bootstraps Java Scipts Links -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous">
+    </script>
+
+
+
+    <!-- JQuery links  -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+
+    <!--High CHART LIVE  -->
+    <script src="http://code.highcharts.com/highcharts.js"></script>
+    <script src="http://code.highcharts.com/highcharts-more.js"></script>
+    <script src="http://code.highcharts.com/modules/exporting.js"></script>
+
+</head>
+
+<body>
+
+    <div class="jumbotron">
+        <h1 class="text-center text-white">Population Visualization </h1>
+    </div>
+    <br>
+    <br>
+
+    <div class="container-fluid">
+        <!-- Example row of columns -->
+        <div class="row">
+            <div class="container-fluid" id="data-temperature">
+
+            </div>
+        </div>
+    </div>
+    <br>
+    <br>
+    <br>
+
+
+
+    <div class="container-fluid">
+        <!-- Example row of columns -->
+        <div class="row">
+            <div class="container-fluid" id="data-humidity">
+
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        var chartTemperatue;
+        var chartHumidity;
+
+        function requestData() {
+            // Ajax call to get the Data from Flask
+            var requests = $.get('/data/{{name}}');
+
+            var tm = requests.done(function (result) {
+                console.log(result)
+                // Temperature
+                // var seriesTemperature = chartTemperatue.series[0],
+                //     shiftTemperature = seriesTemperature.data.length > 20;
+
+                // Humidity
+                // var seriesHumidity = chartHumidity.series[0],
+                //     shiftHumidity = seriesTemperature.data.length > 20;
+
+                // Add the Point
+                // Time Temperature\
+                var data1 = [];
+                for (var i = 0; i < result.length; i++) {
+                    data1.push(parseInt(result[i][2]));
+
+                }
+                console.log(data1);
+                var data2 = [];
+                for (var i = 0; i < result.length; i++) {
+                    data2.push(parseInt(result[i][3]));
+
+                }
+                console.log(data2);
+                var data3 = [];
+                for (var i = 0; i < result.length; i++) {
+                    data3.push(parseInt(result[i][4]));
+
+                }
+                console.log(data3);
+                var data4 = [];
+                for (var i = 0; i < result.length; i++) {
+                    data4.push(parseInt(result[i][5]));
+
+                }
+                console.log(data4);
+                var data5 = [];
+                for (var i = 0; i < result.length; i++) {
+                    data5.push(parseInt(result[i][6]));
+
+                }
+                console.log(data5);
+                var data6 = [];
+                for (var i = 0; i < result.length; i++) {
+                    data6.push(parseInt(result[i][7]));
+
+                }
+                console.log(data6);
+                var data7 = [];
+                for (var i = 0; i < result.length; i++) {
+                    data7.push(parseInt(result[i][8]));
+
+                }
+                console.log(data7);
+                var countries = [];
+                for (var i = 0; i < result.length; i++) {
+                    countries.push(result[i][1]);
+
+                }
+                console.log(countries);
+                name = result[0][1];
+                // data1.push(result[1]);
+
+
+                // Add the Point
+                // Time Humidity
+                // var data2 = [];
+                // data2.push(result[0]);
+                // data2.push(result[2]);
+
+
+                chartTemperatue.series[0].setData(data1);
+                chartTemperatue.series[1].setData(data2);
+                chartTemperatue.series[2].setData(data3);
+                chartTemperatue.series[3].setData(data4);
+                chartTemperatue.series[4].setData(data5);
+                chartTemperatue.series[5].setData(data6);
+                chartTemperatue.series[6].setData(data7);
+                chartTemperatue.xAxis[0].categories = countries;
+
+                chartTemperatue.setTitle({
+                    text: "Population Differences Between Countries"
+                });
+                chartTemperatue.redraw();
+                // chartHumidity.series[0].addPoint(data2, true, shiftHumidity);
+
+
+                // call it again after one second
+                // setTimeout(requestData, 2000);
+                // requestData();
+
+            });
+        }
+
+        $(document).ready(function () {
+            // --------------Chart 1 ----------------------------
+            // chartTemperatue = new Highcharts.Chart({
+            //     chart: {
+            //         renderTo: 'data-temperature',
+            //         defaultSeriesType: 'area',
+            //         events: {
+            //             load: requestData
+            //         }
+            //     },
+            //     title: {
+            //         text: 'Temperature'
+            //     },
+            //     xAxis: {
+            //         type: 'datetime',
+            //         tickPixelInterval: 150,
+            //         maxZoom: 20 * 1000
+            //     },
+            //     yAxis: {
+            //         minPadding: 0.2,
+            //         maxPadding: 0.2,
+            //         title: {
+            //             text: 'Value',
+            //             margin: 80
+            //         }
+            //     },
+            //     series: [{
+            //         color: '#c23d23',
+            //         lineColor: '#303030',
+            //         name: 'Temperature',
+            //         data: []
+            //     }]
+            // });
+            // --------------Chart 1 Ends - -----------------
+
+            chartTemperatue = new Highcharts.Chart({
+                chart: {
+                    renderTo: 'data-temperature',
+                    defaultSeriesType: 'bar',
+                    events: {
+                        load: requestData
+                    }
+                },
+                title: {
+                    text: 'Population Differences Between Countries'
+                },
+
+                xAxis: {
+                    categories: ['Canada', 'India'
+                    ],
+                    title: {
+                        text: null
+                    }
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: 'Population',
+                        align: 'high'
+                    },
+                    labels: {
+                        overflow: 'justify'
+                    }
+                },
+
+                plotOptions: {
+                    bar: {
+                        dataLabels: {
+                            enabled: true
+                        }
+                    }
+                },
+                legend: {
+                    layout: 'vertical',
+                    align: 'right',
+                    verticalAlign: 'top',
+                    x: -40,
+                    y: 80,
+                    floating: true,
+                    borderWidth: 1,
+                    backgroundColor: Highcharts.defaultOptions.legend.backgroundColor || '#FFFFFF',
+                    shadow: true
+                },
+                credits: {
+                    enabled: false
+                },
+                series: [{
+                    name: '1960',
+                    data: [17909009, 450547679]
+                }, {
+                    name: '1970',
+                    data: [21324000, 555189792]
+                }, {
+                    name: '1980',
+                    data: [24515667, 698952844]
+                }, {
+                    name: '1990',
+                    data: [27691138, 8732777]
+                }, {
+                    name: '2000',
+                    data: [30685730, 1056575549]
+                }, {
+                    name: '2010',
+                    data: [34004889, 1234281170]
+                }, {
+                    name: '2019',
+                    data: [37589262, 1366417754]
+                }]
+            });
+
+
+
+        });
+    </script>
+</body>
+
+
+</html>
