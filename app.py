@@ -89,3 +89,8 @@ def main():
     if request.method == 'POST':
         name = request.form['name']
     return render_template('graph.html', name=name)
+
+
+if __name__ == '__main__':
+    app.debug = True
+    app.run()
